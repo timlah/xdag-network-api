@@ -8,7 +8,8 @@ const {
   validatePayment
 } = require('../../utils');
 
-const dataUrl = 'https://raw.githubusercontent.com/timlah/test/master/pool.yml';
+const dataUrl =
+  'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml';
 
 const update = async () => {
   const response = await getResponse(dataUrl);
