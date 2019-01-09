@@ -1,0 +1,13 @@
+FROM node:9-alpine
+
+WORKDIR /home/worker/
+
+# Install nodemon for hot reload
+RUN npm install -g nodemon
+
+# Install node modules, use a mounted volume for other src files when developing
+COPY ./package* ./
+RUN npm install
+
+# Use -L to support windows virtualbox setups
+CMD ["nodemon", "-L", "src/app.js"]

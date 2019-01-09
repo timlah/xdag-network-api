@@ -1,0 +1,24 @@
+version: '2.2'
+
+services:
+  reverse_proxy:
+    build: 
+      dockerfile: Dockerfile-dev
+
+  web_1:
+    build: 
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./web/src:/home/web/src
+
+  web_2:
+    build: 
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./web/src:/home/web/src
+
+  worker:
+    build: 
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./worker/src:/home/worker/src

@@ -1,0 +1,27 @@
+FROM node:9-alpine
+
+# run as non-root user inside the docker container
+# see https://vimeo.com/171803492 at 17:20 mark
+RUN addgroup -S app && adduser -S -G app app 
+# now run as new user app from group app
+
+
+WORKDIR /home/web
+RUN chmod -R 777 /home/web
+
+USER app
+
+# Copy only npm install files first to take advantage of cached Docker layers
+COPY ./package* ./
+RUN npm install --only=production
+
+# Bundle app source
+COPY . .
+
+ENV NODE_EV production
+
+# Expose ports (for orchestrators and dynamic reverse proxies)
+ENV PORT 8080
+EXPOSE 8080
+
+CMD [ "node", "src/server.js" ]

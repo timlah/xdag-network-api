@@ -1,0 +1,42 @@
+version: "2.2"
+
+services:
+  reverse_proxy:
+    build:
+      dockerfile: Dockerfile-prod
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - reverse_proxy
+    command: certonly --webroot --webroot-path=/var/www/html --email jimmy@xdag.io --agree-tos --no-eff-email --staging -d api.xdag.io
+
+  web_1:
+    build:
+      dockerfile: Dockerfile-prod
+
+  web_2:
+    build:
+      dockerfile: Dockerfile-prod
+
+  worker:
+    build:
+      dockerfile: Dockerfile-prod
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/sammy/node_project/views/
+      o: bind

@@ -1,0 +1,98 @@
+version: "2.2"
+
+services:
+  reverse_proxy:
+    build:
+      context: ./reverse-proxy
+    image: networkapi/nginx
+    networks:
+      - networkapi_web
+    ports:
+      - "80:80"
+    depends_on:
+      - web_1
+      - web_2
+    restart: unless-stopped
+
+  web_1:
+    build:
+      context: ./web
+    image: networkapi/node_web
+    env_file:
+      - ./.env
+    networks:
+      - networkapi_database
+      - networkapi_web
+    ports:
+      - "8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web_2:
+    build:
+      context: ./web
+    image: networkapi/node_web
+    env_file:
+      - ./.env
+    networks:
+      - networkapi_database
+      - networkapi_web
+    ports:
+      - "8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./worker
+    image: networkapi/node_worker
+    env_file:
+      - ./.env
+    networks:
+      - networkapi_database
+      - networkapi_web
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  database:
+    build: ./database
+    image: networkapi/postgres
+    env_file:
+      - ./.env
+    volumes:
+      - networkapi_database:/var/lib/postgresql/data
+    networks:
+      - networkapi_database
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cache:
+    image: redis
+    networks:
+      - networkapi_database
+    ports:
+      - "6379:6379"
+    sysctls:
+      net.core.somaxconn: "512"
+    restart: unless-stopped
+
+volumes:
+  networkapi_database:
+    external: true
+
+networks:
+  networkapi_database:
+    driver: bridge
+  networkapi_web:
+    driver: bridge

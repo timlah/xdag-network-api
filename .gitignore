@@ -1,0 +1,20 @@
+Desktop.ini
+newrelic_agent.log
+._*
+Thumbs.db
+dev.bash
+
+# secrets
+*.env
+
+# log files/folder
+log
+*.log
+
+# Application specific files
+#PHPStorm
+.idea
+
+#code coverage
+node_modules
+.DS_Store

@@ -1,0 +1,17 @@
+FROM node:9-alpine
+
+WORKDIR /home/web
+
+# Install nodemon for hot reload
+RUN npm install -g nodemon
+
+# Install node modules, use a mounted volume for other src files when developing
+COPY ./package* ./
+RUN npm install
+
+# Expose ports (for orchestrators and dynamic reverse proxies)
+ENV PORT 8080
+EXPOSE 8080
+
+# Use -L to support windows virtualbox setups
+CMD ["nodemon", "-L", "src/server.js"]
