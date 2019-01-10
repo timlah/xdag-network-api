@@ -35,10 +35,10 @@ const poolStatementGenerator = (datepart, interval) => `
               p.id, 
               jsonb_build_array(
                   extract(epoch from DATE_TRUNC('${datepart}', ps.datatime)),
-                  AVG(ps.hashrate),
+                  AVG(ps.hashrate)::numeric(16,2),
                   (SELECT type FROM pool_state WHERE id = AVG(pstate.id)::int),
-                  AVG(ps.orphan_blocks)::int,
-                  AVG(ps.wait_sync_blocks)::int,
+                  AVG(ps.orphan_blocks)::bigint,
+                  AVG(ps.wait_sync_blocks)::bigint,
                   AVG(ps.hosts)::int
               ) ps_stats
           from pool p
@@ -58,10 +58,10 @@ const networkStatementGenerator = (datepart, interval) => `
       select 
           jsonb_build_array(
               extract(epoch from DATE_TRUNC('${datepart}', ns.datatime)),
-              AVG(ns.hashrate)::int,
-              AVG(ns.supply)::int,
-              AVG(ns.blocks)::int,
-              AVG(ns.main_blocks)::int,
+              AVG(ns.hashrate)::numeric(16,2),
+              AVG(ns.supply)::bigint,
+              AVG(ns.blocks)::bigint,
+              AVG(ns.main_blocks)::bigint,
               AVG(ns.hosts)::int,
               AVG(ns.chain_difficulty)::text
           ) ns_stats
