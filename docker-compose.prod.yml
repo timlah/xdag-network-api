@@ -4,6 +4,9 @@ services:
   reverse_proxy:
     build:
       dockerfile: Dockerfile-prod
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
 
   web_1:
     build:
@@ -16,3 +19,9 @@ services:
   worker:
     build:
       dockerfile: Dockerfile-prod
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
