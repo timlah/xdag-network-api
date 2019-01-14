@@ -4,7 +4,8 @@
 #
 # id: 36 characters long unique UUIDv4 string. Required. Used for database relationships. You can generate one using https://www.uuidgenerator.net/
 # name: String. Required. Usually a cleaned up version of the pools website address
-# miningAddress: String or a list of strings. Required.
+# contactAddress: String. Required. An email / discord ID / something for users to contact the pool's owner / support staff from.
+# miningAddress: String or a list of strings. Required. IP or domain for miners to connect to.
 # stateUrl: String. Required. HTTP(S) address which serves pool's state.txt file. Supports OpenXDAGPool JSON format.
 # statsUrl: String. Required. HTTP(S) address which serves pool's stats.txt file. Supports OpenXDAGPool JSON format.
 # paymentPool: Number between 0 and 100. Required. Supports up to 2 decimals. Percentage of block rewards which the pool takes as a fee
