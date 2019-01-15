@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-
 const logger = require('./logger');
 
 const getResponse = async url => {
@@ -15,7 +14,7 @@ const getResponse = async url => {
       throw Error(`${url}: Non 2xx HTTP code`);
     }
   } catch (err) {
-    logger.warn(`${err}`);
+    logger.warn(JSON.stringify(err.stack));
     success = false;
 
     // Don't process further on error
@@ -26,7 +25,7 @@ const getResponse = async url => {
     body = await response.text();
     success = true;
   } catch (err) {
-    logger.error(`${err}`);
+    logger.warn(JSON.stringify(err.stack));
 
     // Don't process further on error
     return { body, success, type };

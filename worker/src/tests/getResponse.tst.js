@@ -1,0 +1,64 @@
+const fetch = require('jest-fetch-mock');
+
+const getResponse = require('../utils/getResponse');
+
+describe('getResponse', () => {
+  beforeEach(() => {
+    fetch.resetMocks();
+  });
+
+  test('Should fetch an URL and return an object with { success, body, type }', async () => {
+    fetch.mockResponseOnce(
+      'XDAG 0.2.5 Synchronized with the main network. Normal operation.'
+    );
+    const response = await getResponse('https://mockAddress.com');
+
+    expect(response).toEqual(
+      expect.objectContaining({
+        success: true,
+        type: 'text',
+        body: 'XDAG 0.2.5 Synchronized with the main network. Normal operation.'
+      })
+    );
+  });
+
+  test('Should try to return the body as JSON', async () => {
+    fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+    const response = await getResponse('https://mockAddress.com');
+
+    expect(response).toHaveProperty('success', true);
+    expect(response).toHaveProperty('type', 'json');
+    expect(response.body).toBeInstanceOf(Object);
+  });
+
+  test('Should timeout after 10 seconds and return { ..., success: false }', async () => {
+    fetch.mockRejectOnce(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(new Error());
+          }, 10000);
+        })
+    );
+    const response = await getResponse('https://mockAddress.com');
+
+    expect(response).toEqual(
+      expect.objectContaining({
+        success: false
+      })
+    );
+  }, 11000);
+
+  test('Should return { ..., success: false } on a non 2xx http code', async () => {
+    fetch.mockResponseOnce(() => {
+      false;
+    });
+    const response = await getResponse('https://mockAddress.com');
+
+    expect(response).toEqual(
+      expect.objectContaining({
+        success: false
+      })
+    );
+  });
+});
