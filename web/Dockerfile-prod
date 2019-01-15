@@ -20,8 +20,4 @@ COPY . .
 
 ENV NODE_EV production
 
-# Expose ports (for orchestrators and dynamic reverse proxies)
-ENV PORT 8080
-EXPOSE 8080
-
 CMD [ "node", "src/server.js" ]

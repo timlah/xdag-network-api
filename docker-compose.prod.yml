@@ -8,11 +8,29 @@ services:
   web_1:
     build:
       dockerfile: Dockerfile-prod
+    volumes:
+      - ./web/log:/home/web/log
+    expose:
+      - "8080"
 
   web_2:
     build:
       dockerfile: Dockerfile-prod
+    volumes:
+      - ./web/log:/home/web/log
+    expose:
+      - "8080"
 
   worker:
     build:
       dockerfile: Dockerfile-prod
+    volumes:
+      - ./worker/log:/home/worker/log
+
+  database:
+    expose:
+      - "5432"
+
+  cache:
+    expose:
+      - "6379"

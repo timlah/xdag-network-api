@@ -1,24 +1,38 @@
-version: '2.2'
+version: "2.2"
 
 services:
   reverse_proxy:
-    build: 
+    build:
       dockerfile: Dockerfile-dev
+    ports:
+      - "80:80"
 
   web_1:
-    build: 
+    build:
       dockerfile: Dockerfile-dev
     volumes:
       - ./web/src:/home/web/src
+    ports:
+      - "8080"
 
   web_2:
-    build: 
+    build:
       dockerfile: Dockerfile-dev
     volumes:
       - ./web/src:/home/web/src
+    ports:
+      - "8080"
 
   worker:
-    build: 
+    build:
       dockerfile: Dockerfile-dev
     volumes:
       - ./worker/src:/home/worker/src
+
+  database:
+    ports:
+      - "5432:5432"
+
+  cache:
+    ports:
+      - "6379:6379"
