@@ -8,14 +8,12 @@ services:
   web_1:
     build:
       dockerfile: Dockerfile-prod
-    volumes:
-      - ./web/log:/app/log
     expose:
       - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/server.js",
@@ -24,14 +22,12 @@ services:
   web_2:
     build:
       dockerfile: Dockerfile-prod
-    volumes:
-      - ./web/log:/app/log
     expose:
       - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/server.js",
@@ -40,12 +36,10 @@ services:
   worker:
     build:
       dockerfile: Dockerfile-prod
-    volumes:
-      - ./worker/log:/app/log
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/app.js",
@@ -53,8 +47,8 @@ services:
 
   database:
     expose:
-      - "${DATABASE_PORT}"
+      - "${POSTGRES_PORT}"
 
   cache:
     expose:
-      - "${CACHE_PORT}"
+      - "${REDIS_PORT}"
