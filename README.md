@@ -16,13 +16,13 @@ Contains:
 - add the following variables
 
 ```
-DATABASE_USER=<your user>
-DATABASE_PASSWORD=<your password>
-DATABASE_HOST=database
-DATABASE_PORT=5433
+POSTGRES_USER=<your user>
+POSTGRES_PASSWORD=<your password>
+POSTGRES_HOST=database
+POSTGRES_PORT=5433
 
-CACHE_HOST=cache
-CACHE_PORT=6379
+REDIS_HOST=cache
+REDIS_PORT=6379
 
 WEB_PORT=8080
 ```
