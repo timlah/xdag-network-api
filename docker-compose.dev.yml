@@ -17,7 +17,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "nodemon",
         "-L",
@@ -34,7 +34,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "nodemon",
         "-L",
@@ -49,7 +49,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "nodemon",
         "-L",
@@ -58,8 +58,8 @@ services:
 
   database:
     expose:
-      - "${DATABASE_PORT}"
+      - "${POSTGRES_PORT}"
 
   cache:
     expose:
-      - "${CACHE_PORT}"
+      - "${REDIS_PORT}"

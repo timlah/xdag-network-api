@@ -13,7 +13,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/server.js",
@@ -27,7 +27,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/server.js",
@@ -39,7 +39,7 @@ services:
     command:
       [
         "/wait-for-it.sh",
-        "database:${DATABASE_PORT}",
+        "database:${POSTGRES_PORT}",
         "--",
         "node",
         "src/app.js",
@@ -47,8 +47,8 @@ services:
 
   database:
     expose:
-      - "${DATABASE_PORT}"
+      - "${POSTGRES_PORT}"
 
   cache:
     expose:
-      - "${CACHE_PORT}"
+      - "${REDIS_PORT}"
