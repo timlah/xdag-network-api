@@ -1,4 +1,4 @@
-version: "2.2"
+version: "2"
 
 services:
   reverse_proxy:
@@ -9,28 +9,52 @@ services:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./web/log:/home/web/log
+      - ./web/log:/app/log
     expose:
-      - "8080"
+      - "${WEB_PORT}"
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "node",
+        "src/server.js",
+      ]
 
   web_2:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./web/log:/home/web/log
+      - ./web/log:/app/log
     expose:
-      - "8080"
+      - "${WEB_PORT}"
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "node",
+        "src/server.js",
+      ]
 
   worker:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./worker/log:/home/worker/log
+      - ./worker/log:/app/log
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "node",
+        "src/app.js",
+      ]
 
   database:
     expose:
-      - "5432"
+      - "${DATABASE_PORT}"
 
   cache:
     expose:
-      - "6379"
+      - "${CACHE_PORT}"

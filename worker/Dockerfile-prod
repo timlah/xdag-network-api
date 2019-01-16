@@ -1,14 +1,16 @@
 FROM node:9-alpine
 
+# Add wait-for-it.sh to control startup timing
+RUN apk add --no-cache bash
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
 # run as non-root user inside the docker container
 # see https://vimeo.com/171803492 at 17:20 mark
 RUN addgroup -S app && adduser -S -G app app 
+WORKDIR /app
+RUN chmod -R 777 /app
 # now run as new user app from group app
-
-
-WORKDIR /home/worker
-RUN chmod -R 777 /home/worker
-
 USER app
 
 # Copy only npm install files first to take advantage of cached Docker layers
@@ -19,5 +21,3 @@ RUN npm install --only=production
 COPY . .
 
 ENV NODE_EV production
-
-CMD [ "node", "src/app.js" ]

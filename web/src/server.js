@@ -3,4 +3,4 @@ const app = require('./app');
 
 const server = http.createServer(app);
 
-server.listen(8080);
+server.listen(process.env.WEB_PORT);

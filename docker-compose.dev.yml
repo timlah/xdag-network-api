@@ -1,4 +1,4 @@
-version: "2.2"
+version: "2"
 
 services:
   reverse_proxy:
@@ -11,28 +11,55 @@ services:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./web/src:/home/web/src
-    ports:
-      - "8080"
+      - ./web/src:/app/src
+    expose:
+      - "${WEB_PORT}"
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "nodemon",
+        "-L",
+        "src/server.js",
+      ]
 
   web_2:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./web/src:/home/web/src
-    ports:
-      - "8080"
+      - ./web/src:/app/src
+    expose:
+      - "${WEB_PORT}"
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "nodemon",
+        "-L",
+        "src/server.js",
+      ]
 
   worker:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./worker/src:/home/worker/src
+      - ./worker/src:/app/src
+    command:
+      [
+        "/wait-for-it.sh",
+        "database:${DATABASE_PORT}",
+        "--",
+        "nodemon",
+        "-L",
+        "src/app.js",
+      ]
 
   database:
-    ports:
-      - "5432:5432"
+    expose:
+      - "${DATABASE_PORT}"
 
   cache:
-    ports:
-      - "6379:6379"
+    expose:
+      - "${CACHE_PORT}"

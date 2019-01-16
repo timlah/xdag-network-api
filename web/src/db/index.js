@@ -1,4 +1,4 @@
-const { Pool, types } = require('pg');
+const { Pool } = require('pg');
 const redis = require('redis');
 const { promisify } = require('util');
 
@@ -6,15 +6,15 @@ const { promisify } = require('util');
 const logger = require('../utils/logger');
 
 const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  port: process.env.POSTGRES_PORT,
-  database: process.env.POSTGRES_USER,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  database: process.env.DATABASE_USER,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD
 });
 const cache = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT
+  host: process.env.CACHE_HOST,
+  port: process.env.CACHE_PORT
 });
 const getCache = promisify(cache.get).bind(cache);
 

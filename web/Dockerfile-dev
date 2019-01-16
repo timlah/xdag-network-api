@@ -1,6 +1,11 @@
 FROM node:9-alpine
 
-WORKDIR /home/web
+# Add wait-for-it.sh to control startup timing
+RUN apk add --no-cache bash
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+WORKDIR /app
 
 # Install nodemon for hot reload
 RUN npm install -g nodemon
@@ -8,10 +13,3 @@ RUN npm install -g nodemon
 # Install node modules, use a mounted volume for other src files when developing
 COPY ./package* ./
 RUN npm install
-
-# Expose ports (for orchestrators and dynamic reverse proxies)
-ENV PORT 8080
-EXPOSE 8080
-
-# Use -L to support windows virtualbox setups
-CMD ["nodemon", "-L", "src/server.js"]

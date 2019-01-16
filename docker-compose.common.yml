@@ -1,4 +1,4 @@
-version: "2.2"
+version: "2"
 
 services:
   reverse_proxy:
@@ -22,8 +22,7 @@ services:
       - networkapi_database
       - networkapi_web
     depends_on:
-      database:
-        condition: service_healthy
+      - database
     restart: unless-stopped
 
   web_2:
@@ -36,8 +35,7 @@ services:
       - networkapi_database
       - networkapi_web
     depends_on:
-      database:
-        condition: service_healthy
+      - database
     restart: unless-stopped
 
   worker:
@@ -50,8 +48,7 @@ services:
       - networkapi_database
       - networkapi_web
     depends_on:
-      database:
-        condition: service_healthy
+      - database
     restart: unless-stopped
 
   database:
@@ -63,19 +60,12 @@ services:
       - networkapi_database:/var/lib/postgresql/data
     networks:
       - networkapi_database
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
 
   cache:
     image: redis
     networks:
       - networkapi_database
-    sysctls:
-      net.core.somaxconn: "512"
     restart: unless-stopped
 
 volumes:
