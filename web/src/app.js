@@ -1,26 +1,9 @@
 const express = require('express');
-// const Knex = require('knex');
-// const { Model } = require('objection');
 
 const { logger } = require('./utils');
 const mountRoutes = require('./routes');
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-// Initialize knex.
-/* const knex = Knex({
-    client: 'postgresql',
-    connection: {
-      database: 'example'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    }
-  });
-
-// Bind all Models to a knex instance.
-Model.knex(knex); */
 
 const app = express();
 
