@@ -11,7 +11,7 @@ services:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./web/src:/app/src
+      - ./web/src:/home/node/app/src
     expose:
       - "${WEB_PORT}"
     command:
@@ -28,7 +28,7 @@ services:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./web/src:/app/src
+      - ./web/src:/home/node/app/src
     expose:
       - "${WEB_PORT}"
     command:
@@ -45,7 +45,7 @@ services:
     build:
       dockerfile: Dockerfile-dev
     volumes:
-      - ./worker/src:/app/src
+      - ./worker/src:/home/node/app/src
     command:
       [
         "/wait-for-it.sh",

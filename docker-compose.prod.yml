@@ -9,7 +9,7 @@ services:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./web/log:/app/log
+      - ./web/log:/home/node/app/log
     expose:
       - "${WEB_PORT}"
     command:
@@ -25,7 +25,7 @@ services:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./web/log:/app/log
+      - ./web/log:/home/node/app/log
     expose:
       - "${WEB_PORT}"
     command:
@@ -41,7 +41,7 @@ services:
     build:
       dockerfile: Dockerfile-prod
     volumes:
-      - ./worker/log:/app/log
+      - ./worker/log:/home/node/app/log
     command:
       [
         "/wait-for-it.sh",
