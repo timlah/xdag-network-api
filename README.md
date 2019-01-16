@@ -16,12 +16,15 @@ Contains:
 - add the following variables
 
 ```
-REDIS_HOST=cache
-REDIS_PORT=6379
-POSTGRES_USER=<your user>
-POSTGRES_PASSWORD=<your password>
-POSTGRES_HOST=database
-POSTGRES_PORT=5432
+DATABASE_USER=<your user>
+DATABASE_PASSWORD=<your password>
+DATABASE_HOST=database
+DATABASE_PORT=5433
+
+CACHE_HOST=cache
+CACHE_PORT=6379
+
+WEB_PORT=8080
 ```
 
 ### Create an external volume for database data
