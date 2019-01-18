@@ -4,7 +4,7 @@
   "description": "Contains:",
   "main": "index.js",
   "scripts": {
-    "test": "cd worker && npm test",
+    "test": "jest --verbose",
     "postinstall": "cd worker && npm install && cd.. && cd web && npm install"
   },
   "repository": {

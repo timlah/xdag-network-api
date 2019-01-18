@@ -5,7 +5,42 @@ const {
   getStatisticGenerator,
   getPoolStatistics,
   getResponse
-} = require('../utils/getStatistic');
+} = require('../utils');
+
+const validStatesPromise = Promise.resolve([
+  {
+    type: 'ON',
+    server_response: 'Synchronized with the main network. Normal operation.'
+  },
+  {
+    type: 'ON',
+    server_response: 'Waiting for transfer to complete.'
+  },
+  {
+    type: 'SYNC',
+    server_response: 'Connected to the main network. Synchronizing.'
+  },
+  {
+    type: 'MAINTENANCE',
+    server_response: 'Loading blocks from the local storage.'
+  },
+  {
+    type: 'MAINTENANCE',
+    server_response: 'Trying to connect to the main network.'
+  },
+  {
+    type: 'OFFLINE',
+    server_response: "Can''t connect to unix domain socket errno:111"
+  },
+  {
+    type: 'NO_RESPONSE',
+    server_response: null
+  },
+  {
+    type: 'UNKNOWN',
+    server_response: null
+  }
+]);
 
 const stateResponse = {
   connect: 'XDAG 0.2.5 Trying to connect to the main network.',
@@ -50,6 +85,12 @@ wait sync blocks: 50766
 chain difficulty: 8062ba6b4d81288231492060020 of 8062ba6b4d81288231492060020
 XDAG supply: 389920768.000000000 of 389920768.000000000
 hour hashrate MHs: 1524.48 of 61804085.91`;
+
+// mock db module return promise for getState()
+jest.mock('../db', () => ({
+  // eslint-disable-next-line no-unused-vars
+  query: jest.fn(query => validStatesPromise)
+}));
 
 describe('getStatisticGenerator', () => {
   beforeEach(() => {
@@ -137,7 +178,6 @@ describe('getState', () => {
 
     const response1 = await getResponse('https://mockAddress.com');
     const state1 = await getState(response1);
-    expect(state1).toHaveProperty('id');
     expect(state1).toEqual(
       expect.objectContaining({
         type: 'ON',
@@ -147,7 +187,6 @@ describe('getState', () => {
 
     const response2 = await getResponse('https://mockAddress.com');
     const state2 = await getState(response2);
-    expect(state2).toHaveProperty('id');
     expect(state2).toEqual(
       expect.objectContaining({
         type: 'MAINTENANCE',
