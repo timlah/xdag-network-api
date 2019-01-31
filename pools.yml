@@ -72,34 +72,6 @@
   locationCoordinate: (13.4105, 52.5244)
 
 # Contact: kbs1
-- id: 97d12119-6b9b-493b-90fa-6beb6539088e
-  name: "xdag.org China #1"
-  miningAddress: cn1.xdag.org:443
-  stateUrl: https://xdag.org/status/?pool=5
-  statsUrl: https://xdag.org/status/?pool=5
-  paymentPool: 1
-  paymentFinder: 0
-  paymentContributor: 0
-  paymentCommunity: 1
-  website: https://xdag.org/
-  location: China
-  locationCoordinate: (120.1614, 30.2936)
-
-# Contact: kbs1
-- id: ac3970d8-ba38-461d-9e09-9bcff8479392
-  name: "xdag.org Canada #1"
-  miningAddress: ca1.xdag.org:443
-  stateUrl: https://xdag.org/status/?pool=4
-  statsUrl: https://xdag.org/status/?pool=4
-  paymentPool: 1
-  paymentFinder: 0
-  paymentContributor: 0
-  paymentCommunity: 1
-  website: https://xdag.org/
-  location: Canada
-  locationCoordinate: (-73.8659, 45.3168)
-
-# Contact: kbs1
 - id: 2f60af82-6f61-4b60-8994-86f193987118
   name: "xdag.org Finland #1"
   miningAddress: fi1.xdag.org:8080
