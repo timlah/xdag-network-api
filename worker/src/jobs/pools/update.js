@@ -122,8 +122,9 @@ const update = async () => {
   // Delete the same pools from our database that were deleted in the YAML file
   await Promise.all(databasePools.map(async databasePool => {
     if (!loadedPools.find(loadedPool => loadedPool.id === databasePool.id)) {
-      await db.query('DELETE FROM pool WHERE id = $1', [databasePool.id])
+      return db.query('DELETE FROM pool WHERE id = $1', [databasePool.id])
     }
+    return true;
   }))
 
   db.cache.del('pool_list');

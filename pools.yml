@@ -16,20 +16,6 @@
 # locationCoordinate: Point (x, y). Optional. Pool GPS location in longitude and latitude. For example: (139.6917, 35.6895)
 
 # Contact: kbs1
-- id: 90f57b1a-0abf-43e9-a348-203489dd689c
-  name: "xdag.org Germany #1"
-  miningAddress: de1.xdag.org:13654
-  stateUrl: https://xdag.org/status/?pool=1
-  statsUrl: https://xdag.org/status/?pool=1
-  paymentPool: 1
-  paymentFinder: 0
-  paymentContributor: 0
-  paymentCommunity: 1
-  website: https://xdag.org/
-  location: Germany
-  locationCoordinate: (9.4910, 51.2993)
-
-# Contact: kbs1
 - id: 350fe4ec-5c6f-49aa-a381-5a135d8ea39e
   name: "xdag.org Germany #2"
   miningAddress: de2.xdag.org:13655
