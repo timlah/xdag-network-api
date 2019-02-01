@@ -12,12 +12,12 @@ const dataUrl =
   'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml';
 
 const update = async () => {
-  const response = await getResponse(dataUrl);
+  const [databasePools, response] = await Promise.all([db.query('SELECT id from pool'), getResponse(dataUrl)]);
 
-  const pools = yaml.safeLoad(response.body);
+  const loadedPools = yaml.safeLoad(response.body);
 
   await Promise.all(
-    pools.map(
+    loadedPools.map(
       async ({
         id,
         name,
@@ -113,9 +113,19 @@ const update = async () => {
           locationCoordinate,
           version
         ]);
+
+        return id;
       }
     )
   );
+
+  // Delete the same pools from our database that were deleted in the YAML file
+  await Promise.all(databasePools.map(async databasePool => {
+    if (!loadedPools.find(loadedPool => loadedPool.id === databasePool.id)) {
+      return db.query('DELETE FROM pool WHERE id = $1', [databasePool.id])
+    }
+    return true;
+  }))
 
   db.cache.del('pool_list');
   logger.info(`Updated database entries for pools`);

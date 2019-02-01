@@ -5,7 +5,7 @@ const logger = require('./logger');
 const getResponse = async url => {
   let response;
   let body;
-  let success;
+  let success = false;
   let type;
 
   try {
@@ -16,15 +16,12 @@ const getResponse = async url => {
     }
   } catch (err) {
     logger.warn(`${err}`);
-    success = false;
-
     // Don't process further on error
     return { body, success, type };
   }
 
   try {
     body = await response.text();
-    success = true;
   } catch (err) {
     logger.error(`${err}`);
 
@@ -36,8 +33,16 @@ const getResponse = async url => {
   try {
     body = JSON.parse(body);
     type = 'json';
+
+    if (!Object.prototype.hasOwnProperty.call(body, "error")) {
+          // json response doesn't include an error key
+      success = true;
+    }
   } catch (err) {
     type = 'text';
+    // response is text
+    // let functions that read data from the text handle errors on their own
+    success = true;
   }
 
   return { body, success, type };
