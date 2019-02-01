@@ -6,7 +6,7 @@ services:
       context: ./reverse-proxy
     image: networkapi/nginx
     networks:
-      - networkapi_web
+      - webnet
     depends_on:
       - web_1
       - web_2
@@ -19,8 +19,8 @@ services:
     env_file:
       - ./.env
     networks:
-      - networkapi_database
-      - networkapi_web
+      - dbnet
+      - webnet
     depends_on:
       - database
     restart: unless-stopped
@@ -32,8 +32,8 @@ services:
     env_file:
       - ./.env
     networks:
-      - networkapi_database
-      - networkapi_web
+      - dbnet
+      - webnet
     depends_on:
       - database
     restart: unless-stopped
@@ -45,8 +45,8 @@ services:
     env_file:
       - ./.env
     networks:
-      - networkapi_database
-      - networkapi_web
+      - dbnet
+      - webnet
     depends_on:
       - database
     restart: unless-stopped
@@ -59,13 +59,13 @@ services:
     volumes:
       - networkapi_database:/var/lib/postgresql/data
     networks:
-      - networkapi_database
+      - dbnet
     restart: unless-stopped
 
   cache:
     image: redis
     networks:
-      - networkapi_database
+      - dbnet
     restart: unless-stopped
 
 volumes:
@@ -73,7 +73,7 @@ volumes:
     external: true
 
 networks:
-  networkapi_database:
+  dbnet:
     driver: bridge
-  networkapi_web:
+  webnet:
     driver: bridge
