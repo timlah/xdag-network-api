@@ -15,20 +15,6 @@
 # location: String. Optional. A country where the pool is located in
 # locationCoordinate: Point (x, y). Optional. Pool GPS location in longitude and latitude. For example: (139.6917, 35.6895)
 
-# Contact: AnotherYou
-- id: 3eebc851-f07f-42c2-84ab-34fe0aa209b3
-  name: corpopool.com
-  miningAddress: xdag.corpopool.com:443
-  stateUrl: http://dagger.corpopool.com/state.txt
-  statsUrl: http://dagger.corpopool.com/stats.txt
-  paymentPool: 1
-  paymentFinder: 1
-  paymentContributor: 1
-  paymentCommunity: 1
-  website: http://www.corpopool.com/
-  location: Poland
-  locationCoordinate: (19.9167, 50.0833)
-
 # Contact: kbs1
 - id: 90f57b1a-0abf-43e9-a348-203489dd689c
   name: "xdag.org Germany #1"

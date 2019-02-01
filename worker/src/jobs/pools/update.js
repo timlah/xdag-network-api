@@ -9,7 +9,7 @@ const {
 } = require('../../utils');
 
 const dataUrl =
-  'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml';
+  'https://raw.githubusercontent.com/timlah/xdag-network-api/upd-pools/pools.yml';
 
 const update = async () => {
   const [databasePools, response] = await Promise.all([db.query('SELECT id from pool'), getResponse(dataUrl)]);
