@@ -2,10 +2,11 @@ const fetch = require('node-fetch');
 
 const logger = require('./logger');
 
-const getResponse = async url => {
+const getPoolResponse = async url => {
+  let success = false;
   let response;
   let body;
-  let success = false;
+  let lastModified;
   let type;
 
   try {
@@ -35,17 +36,27 @@ const getResponse = async url => {
     type = 'json';
 
     if (!Object.prototype.hasOwnProperty.call(body, "error")) {
-          // json response doesn't include an error key
-      success = true;
+      // Don't process further on error
+      return { body, success, type };
     }
   } catch (err) {
-    type = 'text';
     // response is text
-    // let functions that read data from the text handle errors on their own
-    success = true;
+    type = 'text';
   }
 
-  return { body, success, type };
+  try {
+    if (type === 'json') {
+      lastModified = new Date(body.date).toISOString();
+    } else {
+      lastModified = new Date(response.headers.get('last-modified')).toISOString();
+    }
+  } catch(err) {
+    logger.warn(`Missing last modified date from: ${url}`);
+    lastModified = null;
+  }
+
+  success = true;
+  return { body, success, type, lastModified };
 };
 
-module.exports = getResponse;
+module.exports = getPoolResponse;

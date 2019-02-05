@@ -1,5 +1,5 @@
 const mockServer = require('./server');
-const getResponse = require('../utils/getResponse');
+const getPoolResponse = require('../utils/getPoolResponse');
 
 let server;
 const port = 8181;
@@ -13,9 +13,9 @@ afterAll(done => {
   server.close(done);
 });
 
-describe('getResponse', () => {
+describe('getPoolResponse', () => {
   test('Should fetch an URL and return an object { success, body, type }', async () => {
-    const response = await getResponse(`${endpoint}/state`);
+    const response = await getPoolResponse(`${endpoint}/state`);
 
     expect(response).toEqual(
       expect.objectContaining({
@@ -27,7 +27,7 @@ describe('getResponse', () => {
   });
 
   test('Should try to return the body as JSON', async () => {
-    const response = await getResponse(`${endpoint}/json-state`);
+    const response = await getPoolResponse(`${endpoint}/json-state`);
 
     expect(response).toHaveProperty('success', true);
     expect(response).toHaveProperty('type', 'json');
@@ -35,7 +35,7 @@ describe('getResponse', () => {
   });
 
   test('Should timeout after 10 seconds and return { ..., success: false }', async () => {
-    const response = await getResponse(`${endpoint}/timeout`);
+    const response = await getPoolResponse(`${endpoint}/timeout`);
 
     expect(response).toEqual(
       expect.objectContaining({
@@ -45,7 +45,7 @@ describe('getResponse', () => {
   }, 11000);
 
   test('Should return { ..., success: false } on a non 2xx http code', async () => {
-    const response = await getResponse(`${endpoint}/404`);
+    const response = await getPoolResponse(`${endpoint}/404`);
 
     expect(response).toEqual(
       expect.objectContaining({
