@@ -1,5 +1,5 @@
 const mockServer = require('./server');
-const getResponse = require('../utils/getResponse');
+const getPoolResponse = require('../utils/getPoolResponse');
 const {
   getState,
   getStatisticGenerator,
@@ -27,9 +27,9 @@ describe('getStatisticGenerator', () => {
       validate: value => !Number.isNaN(value)
     });
 
-    const response1 = await getResponse(`${endpoint}/json-state`);
+    const response1 = await getPoolResponse(`${endpoint}/json-state`);
     const hosts1 = await getStatistic(response1, 0);
-    const response2 = await getResponse(`${endpoint}/stats`);
+    const response2 = await getPoolResponse(`${endpoint}/stats`);
     const hosts2 = await getStatistic(response2, 1);
 
     expect(hosts1).toBe(595);
@@ -44,7 +44,7 @@ describe('getStatisticGenerator', () => {
       validate: value => !Number.isNaN(value)
     });
 
-    const response = await getResponse(`${endpoint}/stats`);
+    const response = await getPoolResponse(`${endpoint}/stats`);
     const chainDiff = await getStatistic(response, 0);
 
     expect(chainDiff).toBeUndefined();
@@ -53,7 +53,7 @@ describe('getStatisticGenerator', () => {
 
 describe('getPoolStatistics', () => {
   test('Should return pool stats from a json response', async () => {
-    const response = await getResponse(`${endpoint}/json-state`);
+    const response = await getPoolResponse(`${endpoint}/json-state`);
     const { hashrate, hosts, waitSyncBlocks, orphanBlocks } = getPoolStatistics(
       response
     );
@@ -65,7 +65,7 @@ describe('getPoolStatistics', () => {
   });
 
   test('Should return pool stats from a text response', async () => {
-    const response = await getResponse(`${endpoint}/stats`);
+    const response = await getPoolResponse(`${endpoint}/stats`);
     const { hashrate, hosts, waitSyncBlocks, orphanBlocks } = getPoolStatistics(
       response
     );
@@ -78,10 +78,10 @@ describe('getPoolStatistics', () => {
 });
 
 describe('getState', () => {
-  test('Should find the network state from an object returned by getResponse()', async () => {
-    const response1 = await getResponse(`${endpoint}/state`);
+  test('Should find the network state from an object returned by getPoolResponse()', async () => {
+    const response1 = await getPoolResponse(`${endpoint}/state`);
     const state1 = await getState(response1);
-    const response2 = await getResponse(`${endpoint}/state-connect`);
+    const response2 = await getPoolResponse(`${endpoint}/state-connect`);
     const state2 = await getState(response2);
 
     expect(state1).toHaveProperty('id');
@@ -101,8 +101,8 @@ describe('getState', () => {
     );
   });
 
-  test(`Should return state "NO_RESPONSE" if getResponse() returned with { ..., success: false }`, async () => {
-    const response = await getResponse(`${endpoint}/404`);
+  test(`Should return state "NO_RESPONSE" if getPoolResponse() returned with { ..., success: false }`, async () => {
+    const response = await getPoolResponse(`${endpoint}/404`);
     const state = await getState(response);
 
     expect(state).toEqual(
@@ -113,8 +113,8 @@ describe('getState', () => {
     );
   });
 
-  test(`Should return state "UNKNOWN" if getResponse() doesn't contain a valid state`, async () => {
-    const response = await getResponse(`${endpoint}/state-bad`);
+  test(`Should return state "UNKNOWN" if getPoolResponse() doesn't contain a valid state`, async () => {
+    const response = await getPoolResponse(`${endpoint}/state-bad`);
     const state = await getState(response);
 
     expect(state).toEqual(

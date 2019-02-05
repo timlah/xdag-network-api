@@ -2,7 +2,7 @@ const logger = require('./logger');
 const findStatistic = require('./findStatistic');
 const findSoftwareVersion = require('./findSoftwareVersion');
 const network = require('./network');
-const getResponse = require('./getResponse');
+const getPoolResponse = require('./getPoolResponse');
 const validState = require('./validState');
 const validatePayment = require('./validatePayment');
 const {
@@ -19,7 +19,7 @@ module.exports = {
   network,
   logger,
   validState,
-  getResponse,
+  getPoolResponse,
   getState,
   getSupply,
   getHashrate,

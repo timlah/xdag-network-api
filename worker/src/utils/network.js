@@ -14,12 +14,12 @@ const {
 // Fetch stats from several pools/explorers
 // create a new network record based on all their responses
 const initNewRecord = totalResponses => {
-  let resolveGetResponses;
+  let resolvegetPoolResponses;
   const successResponses = [];
   let responseCount = 0;
 
-  const getResponses = new Promise(resolve => {
-    resolveGetResponses = resolve;
+  const getPoolResponses = new Promise(resolve => {
+    resolvegetPoolResponses = resolve;
   });
 
   const checkResolve = async () => {
@@ -29,7 +29,7 @@ const initNewRecord = totalResponses => {
     if (responseCount >= totalResponses) {
       // All stats have been fetched and their responses checked
       logger.debug(`Resolve network responses`);
-      resolveGetResponses(successResponses);
+      resolvegetPoolResponses(successResponses);
     }
   };
 
@@ -60,12 +60,12 @@ const initNewRecord = totalResponses => {
   };
 
   const getReportedHashrate = async () => {
-    const responses = await getResponses;
+    const responses = await getPoolResponses;
     return pickValue(responses, getHashrate, compareNum);
   };
 
   const create = async () => {
-    const responses = await getResponses;
+    const responses = await getPoolResponses;
 
     const supply = pickValue(responses, getSupply, compareNum);
     const hashrate = pickValue(responses, getHashrate, compareNum);
@@ -100,7 +100,7 @@ const initNewRecord = totalResponses => {
     ]);
 
     db.cache.del('network_stats_20_MIN');
-    logger.info(
+    logger.debug(
       `Create new network stats record: ${JSON.stringify(insertData)}`
     );
   };
