@@ -24,6 +24,8 @@ services:
     depends_on:
       - database
     restart: unless-stopped
+    expose:
+      - "${WEB_PORT}"
 
   web_2:
     build:
@@ -37,6 +39,8 @@ services:
     depends_on:
       - database
     restart: unless-stopped
+    expose:
+      - "${WEB_PORT}"
 
   worker:
     build:
@@ -52,8 +56,7 @@ services:
     restart: unless-stopped
 
   database:
-    build: ./database
-    image: networkapi/postgres
+    image: postgres:10-alpine
     env_file:
       - ./.env
     volumes:
@@ -61,12 +64,28 @@ services:
     networks:
       - dbnet
     restart: unless-stopped
+    expose:
+      - "${POSTGRES_PORT}"
+
+  database_migrate:
+    image: boxfuse/flyway:5.2-alpine
+    env_file:
+      - ./.env
+    command: -url=jdbc:postgresql://database/ -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} -connectRetries=60 migrate
+    volumes:
+      - ./database/migrations:/flyway/sql
+    depends_on:
+      - database
+    networks:
+      - dbnet
 
   cache:
-    image: redis
+    image: redis:5.0.3-alpine
     networks:
       - dbnet
     restart: unless-stopped
+    expose:
+      - "${REDIS_PORT}"
 
 volumes:
   networkapi_database:

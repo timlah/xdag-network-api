@@ -1,0 +1,35 @@
+version: "2"
+
+services:
+  database:
+    build: ./database
+    image: networkapi/postgres
+    env_file:
+      - ./.env
+    volumes:
+      - networkapi_database:/var/lib/postgresql/data
+    networks:
+      - dbnet
+    restart: unless-stopped
+    expose:
+      - "${POSTGRES_PORT}"
+  
+  database_migrate:
+    image: boxfuse/flyway:5.2
+    env_file:
+      - ./.env
+    command: -url=jdbc:postgresql://database/ -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} -connectRetries=60 migrate
+    volumes:
+      - ./database/migrations:/flyway/sql
+    depends_on:
+      - database
+    networks:
+      - dbnet
+
+volumes:
+  networkapi_database:
+    external: true
+
+networks:
+  dbnet:
+    driver: bridge

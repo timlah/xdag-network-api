@@ -12,8 +12,6 @@ services:
       dockerfile: Dockerfile-dev
     volumes:
       - ./web/src:/home/node/app/src
-    expose:
-      - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
@@ -29,8 +27,6 @@ services:
       dockerfile: Dockerfile-dev
     volumes:
       - ./web/src:/home/node/app/src
-    expose:
-      - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
@@ -55,11 +51,3 @@ services:
         "-L",
         "src/app.js",
       ]
-
-  database:
-    expose:
-      - "${POSTGRES_PORT}"
-
-  cache:
-    expose:
-      - "${REDIS_PORT}"
