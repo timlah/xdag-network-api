@@ -2,7 +2,7 @@ const db = require('../../db');
 const {
   logger,
   network,
-  getResponse,
+  getPoolResponse,
   getPoolStatistics,
   getState
 } = require('../../utils');
@@ -15,6 +15,7 @@ const createPoolRecord = async (
   { id, state_url: stateUrl, stats_url: statsUrl },
   networkRecord
 ) => {
+  let lastModified;
   let state;
   let hashrate;
   let orphanBlocks;
@@ -23,7 +24,9 @@ const createPoolRecord = async (
 
   // Some pools display state and other stats from the same URL in JSON, others use seperate URL's
   if (stateUrl === statsUrl) {
-    const response = await getResponse(stateUrl);
+    const response = await getPoolResponse(stateUrl);
+    // eslint-disable-next-line prefer-destructuring
+    lastModified = response.lastModified;
 
     // Report stats response to networkRecord
     if (response.success) {
@@ -40,8 +43,11 @@ const createPoolRecord = async (
       hosts
     } = await getPoolStatistics(response));
   } else {
-    const stateResponse = await getResponse(stateUrl);
-    const statsResponse = await getResponse(statsUrl);
+    const stateResponse = await getPoolResponse(stateUrl);
+    const statsResponse = await getPoolResponse(statsUrl);
+
+    // eslint-disable-next-line prefer-destructuring
+    lastModified = stateResponse.lastModified;
 
     // Report stats response to networkRecord
     if (statsResponse.success) {
@@ -73,7 +79,7 @@ const createPoolRecord = async (
 
   const insertData = await db.query(statement, [
     id,
-    new Date(),
+    lastModified || new Date().toISOString(),
     state.id,
     hashrate,
     orphanBlocks,
