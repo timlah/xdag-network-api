@@ -1,0 +1,2 @@
+ALTER TABLE pool
+ADD COLUMN contact TEXT;
