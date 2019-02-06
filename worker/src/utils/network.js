@@ -47,7 +47,7 @@ const initNewRecord = totalResponses => {
   const sortValues = (responses, getFn, sortFn) =>
     responses
       .map(response => getFn(response, 1))
-      .filter(value => value !== undefined)
+      .filter(value => value !== null)
       .sort(sortFn);
 
   const compareNum = (a, b) => a - b;
@@ -55,6 +55,7 @@ const initNewRecord = totalResponses => {
 
   const pickValue = (responses, getFn, sortFn) => {
     const sortedValues = sortValues(responses, getFn, sortFn);
+
     // Use the middle values from sorted lists to reduce the chance of inaccurate data/bad actors
     return sortedValues[Math.floor(sortedValues.length / 2)];
   };
@@ -78,19 +79,18 @@ const initNewRecord = totalResponses => {
       compareBigInt
     );
 
-    // bigInt(undefined, 16).toString() generates the string 0.000...
-    // keep it undefined so its inserted as null to the database
-    if (chainDifficulty !== undefined) {
+    // bigInt(null, 16).toString() generates the string 0.000...
+    // keep it null so its inserted as null to the database
+    if (chainDifficulty !== null) {
       chainDifficulty = bigInt(chainDifficulty, 16).toString();
     }
 
     const statement = `
-      INSERT INTO network_stats(datatime, supply, hashrate, blocks, main_blocks, hosts, chain_difficulty) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+      INSERT INTO network_stats(supply, hashrate, blocks, main_blocks, hosts, chain_difficulty) 
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
     `;
 
     const insertData = await db.query(statement, [
-      new Date(),
       supply,
       hashrate,
       blocks,

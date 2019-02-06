@@ -1,16 +1,17 @@
 const validState = require('./validState');
 const findStatistic = require('./findStatistic');
+const isOkLastModified = require('./isOkLastModified');
 
 // Responses from explorers/pools include stats for the themselves and the entire network
 // index 0 = self, 1 = network
 const getStatisticGenerator = ({ jsonKey, textKey, validate, primitive }) => (
-  { success, body, type },
+  { success, body, type, lastModified },
   useIndex = 0
 ) => {
   let value;
 
-  if (!success) {
-    return undefined;
+  if (!success || !isOkLastModified(lastModified)) {
+    return null;
   }
 
   if (type === 'json') {
@@ -82,9 +83,13 @@ const getChainDifficulty = getStatisticGenerator({
   validate: value => /^[0-9a-fA-F]+$/.test(value)
 });
 
-const getState = async ({ success, body, type }) => {
+const getState = async ({ success, body, type, lastModified }) => {
   if (!success) {
     return validState.getFromType('NO_RESPONSE');
+  }
+
+  if (!isOkLastModified(lastModified)) {
+    return validState.getFromType('UNKNOWN');
   }
 
   if (type === 'json') {
