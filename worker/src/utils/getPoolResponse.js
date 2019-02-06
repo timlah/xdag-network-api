@@ -35,7 +35,7 @@ const getPoolResponse = async url => {
     body = JSON.parse(body);
     type = 'json';
 
-    if (!Object.prototype.hasOwnProperty.call(body, "error")) {
+    if (Object.prototype.hasOwnProperty.call(body, 'error')) {
       // Don't process further on error
       return { body, success, type };
     }
@@ -48,9 +48,11 @@ const getPoolResponse = async url => {
     if (type === 'json') {
       lastModified = new Date(body.date).toISOString();
     } else {
-      lastModified = new Date(response.headers.get('last-modified')).toISOString();
+      lastModified = new Date(
+        response.headers.get('last-modified')
+      ).toISOString();
     }
-  } catch(err) {
+  } catch (err) {
     logger.warn(`Missing last modified date from: ${url}`);
     lastModified = null;
   }
