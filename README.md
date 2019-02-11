@@ -100,7 +100,7 @@ docker-compose -f docker-compose.migrate.yml -d
 ```
 
 ## Run application
-Remove the `-d` option if you wish to stay attatched to the containers output
+Remove the `-d` option if you wish to stay attatched to the containers output. 
 Add the `--build` option if there's a need to force container image rebuild.
 
 ### Development
