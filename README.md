@@ -117,12 +117,16 @@ docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml up -d
 
 ## Misc
 
+### Updating pool config
+
+Every 15 minutes the application downloads `./pools.yml` from https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml and updates the database with any changes. The address can be modified by changing `dataUrl` in `./worker/src/jobs/pools/update.js`.
+
 ### Updating database schema
 
-This application uses flyway to manage database migrations. Read https://flywaydb.org/documentation/migrations for more information.
+The application uses flyway to manage database migrations. Read https://flywaydb.org/documentation/migrations for more information.
 
 The basic steps are:
-1. Create a new file in `database/migrations/` and follow the versioned naming system found on https://flywaydb.org/documentation/migrations#versioned-migrations
+1. Create a new file in `./database/migrations/` and follow the versioned naming system found on https://flywaydb.org/documentation/migrations#versioned-migrations
 2. Add your sql queries to the new file
 3. Run `docker-compose -f docker-compose.migrate.yml up -d`
 
