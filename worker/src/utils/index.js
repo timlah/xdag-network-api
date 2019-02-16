@@ -2,9 +2,10 @@ const logger = require('./logger');
 const findStatistic = require('./findStatistic');
 const findSoftwareVersion = require('./findSoftwareVersion');
 const network = require('./network');
-const getResponse = require('./getResponse');
+const getPoolResponse = require('./getPoolResponse');
 const validState = require('./validState');
 const validatePayment = require('./validatePayment');
+const isOkLastModified = require('./isOkLastModified');
 const {
   getPoolStatistics,
   getStatisticGenerator,
@@ -14,12 +15,13 @@ const {
 } = require('./getStatistic');
 
 module.exports = {
+  isOkLastModified,
   findStatistic,
   findSoftwareVersion,
   network,
   logger,
   validState,
-  getResponse,
+  getPoolResponse,
   getState,
   getSupply,
   getHashrate,

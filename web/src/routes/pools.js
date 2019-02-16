@@ -30,6 +30,10 @@ router.get('/', async (req, res, next) => {
       cacheKey: 'pool_list'
     });
 
+    if (!result.length) {
+      throw new Error("0 length response from pools query");
+    }
+
     const parsedResult = result.map(
       ({
         payment_pool,

@@ -2,9 +2,10 @@ const db = require('../../db');
 const {
   logger,
   network,
-  getResponse,
+  getPoolResponse,
   getPoolStatistics,
-  getState
+  getState,
+  isOkLastModified
 } = require('../../utils');
 
 // Query database for pools and their data urls
@@ -15,6 +16,7 @@ const createPoolRecord = async (
   { id, state_url: stateUrl, stats_url: statsUrl },
   networkRecord
 ) => {
+  let lastModified;
   let state;
   let hashrate;
   let orphanBlocks;
@@ -23,14 +25,10 @@ const createPoolRecord = async (
 
   // Some pools display state and other stats from the same URL in JSON, others use seperate URL's
   if (stateUrl === statsUrl) {
-    const response = await getResponse(stateUrl);
+    const response = await getPoolResponse(stateUrl);
 
-    // Report stats response to networkRecord
-    if (response.success) {
-      networkRecord.addResponseSuccess(response);
-    } else {
-      networkRecord.addResponseFailure();
-    }
+    // eslint-disable-next-line prefer-destructuring
+    lastModified = response.lastModified;
 
     state = await getState(response);
     ({
@@ -39,16 +37,25 @@ const createPoolRecord = async (
       waitSyncBlocks,
       hosts
     } = await getPoolStatistics(response));
-  } else {
-    const stateResponse = await getResponse(stateUrl);
-    const statsResponse = await getResponse(statsUrl);
 
     // Report stats response to networkRecord
-    if (statsResponse.success) {
-      networkRecord.addResponseSuccess(statsResponse);
+    // reject responses which last modified value is too old
+    // reject pools which state isn't operational or syncing
+    if (
+      response.success &&
+      isOkLastModified(lastModified) &&
+      (state.type === 'ON' || state.type === 'SYNC')
+    ) {
+      networkRecord.addResponseSuccess(response);
     } else {
       networkRecord.addResponseFailure();
     }
+  } else {
+    const stateResponse = await getPoolResponse(stateUrl);
+    const statsResponse = await getPoolResponse(statsUrl);
+
+    // eslint-disable-next-line prefer-destructuring
+    lastModified = statsResponse.lastModified;
 
     state = await getState(stateResponse);
     ({
@@ -57,6 +64,19 @@ const createPoolRecord = async (
       waitSyncBlocks,
       hosts
     } = await getPoolStatistics(statsResponse));
+
+    // Report stats response to networkRecord
+    // reject responses which last modified value is too old
+    // reject pools which state isn't operational or syncing
+    if (
+      statsResponse.success &&
+      isOkLastModified(lastModified) &&
+      (state.type === 'ON' || state.type === 'SYNC')
+    ) {
+      networkRecord.addResponseSuccess(statsResponse);
+    } else {
+      networkRecord.addResponseFailure();
+    }
   }
 
   // Filter out invalid hashrate reports (higher than the current reported network hashrate)
@@ -73,7 +93,7 @@ const createPoolRecord = async (
 
   const insertData = await db.query(statement, [
     id,
-    new Date(),
+    lastModified || new Date().toISOString(),
     state.id,
     hashrate,
     orphanBlocks,

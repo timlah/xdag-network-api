@@ -8,8 +8,6 @@ services:
   web_1:
     build:
       dockerfile: Dockerfile-prod
-    expose:
-      - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
@@ -22,8 +20,6 @@ services:
   web_2:
     build:
       dockerfile: Dockerfile-prod
-    expose:
-      - "${WEB_PORT}"
     command:
       [
         "/wait-for-it.sh",
@@ -44,11 +40,3 @@ services:
         "node",
         "src/app.js",
       ]
-
-  database:
-    expose:
-      - "${POSTGRES_PORT}"
-
-  cache:
-    expose:
-      - "${REDIS_PORT}"

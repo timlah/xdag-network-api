@@ -14,12 +14,12 @@ const {
 // Fetch stats from several pools/explorers
 // create a new network record based on all their responses
 const initNewRecord = totalResponses => {
-  let resolveGetResponses;
+  let resolvegetPoolResponses;
   const successResponses = [];
   let responseCount = 0;
 
-  const getResponses = new Promise(resolve => {
-    resolveGetResponses = resolve;
+  const getPoolResponses = new Promise(resolve => {
+    resolvegetPoolResponses = resolve;
   });
 
   const checkResolve = async () => {
@@ -29,7 +29,7 @@ const initNewRecord = totalResponses => {
     if (responseCount >= totalResponses) {
       // All stats have been fetched and their responses checked
       logger.debug(`Resolve network responses`);
-      resolveGetResponses(successResponses);
+      resolvegetPoolResponses(successResponses);
     }
   };
 
@@ -47,7 +47,7 @@ const initNewRecord = totalResponses => {
   const sortValues = (responses, getFn, sortFn) =>
     responses
       .map(response => getFn(response, 1))
-      .filter(value => value !== undefined)
+      .filter(value => value !== null)
       .sort(sortFn);
 
   const compareNum = (a, b) => a - b;
@@ -55,17 +55,18 @@ const initNewRecord = totalResponses => {
 
   const pickValue = (responses, getFn, sortFn) => {
     const sortedValues = sortValues(responses, getFn, sortFn);
+
     // Use the middle values from sorted lists to reduce the chance of inaccurate data/bad actors
     return sortedValues[Math.floor(sortedValues.length / 2)];
   };
 
   const getReportedHashrate = async () => {
-    const responses = await getResponses;
+    const responses = await getPoolResponses;
     return pickValue(responses, getHashrate, compareNum);
   };
 
   const create = async () => {
-    const responses = await getResponses;
+    const responses = await getPoolResponses;
 
     const supply = pickValue(responses, getSupply, compareNum);
     const hashrate = pickValue(responses, getHashrate, compareNum);
@@ -78,19 +79,18 @@ const initNewRecord = totalResponses => {
       compareBigInt
     );
 
-    // bigInt(undefined, 16).toString() generates the string 0.000...
-    // keep it undefined so its inserted as null to the database
-    if (chainDifficulty !== undefined) {
+    // bigInt(null, 16).toString() generates the string 0.000...
+    // keep it null so its inserted as null to the database
+    if (chainDifficulty !== null) {
       chainDifficulty = bigInt(chainDifficulty, 16).toString();
     }
 
     const statement = `
-      INSERT INTO network_stats(datatime, supply, hashrate, blocks, main_blocks, hosts, chain_difficulty) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+      INSERT INTO network_stats(supply, hashrate, blocks, main_blocks, hosts, chain_difficulty) 
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
     `;
 
     const insertData = await db.query(statement, [
-      new Date(),
       supply,
       hashrate,
       blocks,
@@ -100,7 +100,7 @@ const initNewRecord = totalResponses => {
     ]);
 
     db.cache.del('network_stats_20_MIN');
-    logger.info(
+    logger.debug(
       `Create new network stats record: ${JSON.stringify(insertData)}`
     );
   };

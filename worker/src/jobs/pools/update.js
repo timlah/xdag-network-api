@@ -1,9 +1,10 @@
 const yaml = require('js-yaml');
+const fetch = require('node-fetch');
 
 const db = require('../../db');
 const {
   logger,
-  getResponse,
+  getPoolResponse,
   findSoftwareVersion,
   validatePayment
 } = require('../../utils');
@@ -12,9 +13,10 @@ const dataUrl =
   'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml';
 
 const update = async () => {
-  const [databasePools, response] = await Promise.all([db.query('SELECT id from pool'), getResponse(dataUrl)]);
+  const [databasePools, response] = await Promise.all([db.query('SELECT id from pool'), fetch(dataUrl)]);
+  const body = await response.text();
 
-  const loadedPools = yaml.safeLoad(response.body);
+  const loadedPools = yaml.safeLoad(body);
 
   await Promise.all(
     loadedPools.map(
@@ -86,7 +88,7 @@ const update = async () => {
 
         // Get pool XDAG software version number
         // get payment config if state url is served through openXDAGpool
-        const { body, success } = await getResponse(stateUrl);
+        const { body, success } = await getPoolResponse(stateUrl);
 
         if (stateUrl === statsUrl && success) {
           version = body.version || null;

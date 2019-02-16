@@ -34,7 +34,7 @@ const poolStatementGenerator = (datepart, interval) => `
           select 
               p.id, 
               jsonb_build_array(
-                  extract(epoch from DATE_TRUNC('${datepart}', ps.datatime)),
+                  extract(epoch from DATE_TRUNC('${datepart}', ps.created_at)),
                   AVG(ps.hashrate)::numeric(16,2),
                   (SELECT type FROM pool_state WHERE id = AVG(pstate.id)::int),
                   AVG(ps.orphan_blocks)::bigint,
@@ -44,9 +44,9 @@ const poolStatementGenerator = (datepart, interval) => `
           from pool p
           join pool_stats ps on ps.pool_id = p.id
           join pool_state pstate on pstate.id = ps.pool_state_id
-          WHERE ps.datatime > current_timestamp - interval '${interval}'
-          GROUP BY p.id, DATE_TRUNC('${datepart}', ps.datatime)
-          ORDER BY p.id ASC, DATE_TRUNC('${datepart}', ps.datatime) ASC
+          WHERE ps.created_at > current_timestamp - interval '${interval}'
+          GROUP BY p.id, DATE_TRUNC('${datepart}', ps.created_at)
+          ORDER BY p.id ASC, DATE_TRUNC('${datepart}', ps.created_at) ASC
       ) ps
       group by id
   ) ps
@@ -57,7 +57,7 @@ const networkStatementGenerator = (datepart, interval) => `
   from (
       select 
           jsonb_build_array(
-              extract(epoch from DATE_TRUNC('${datepart}', ns.datatime)),
+              extract(epoch from DATE_TRUNC('${datepart}', ns.created_at)),
               AVG(ns.hashrate)::numeric(16,2),
               AVG(ns.supply)::bigint,
               AVG(ns.blocks)::bigint,
@@ -66,9 +66,9 @@ const networkStatementGenerator = (datepart, interval) => `
               AVG(ns.chain_difficulty)::text
           ) ns_stats
       from network_stats ns
-      WHERE ns.datatime > current_timestamp - interval '${interval}'
-      GROUP BY DATE_TRUNC('${datepart}', ns.datatime)
-      ORDER BY DATE_TRUNC('${datepart}', ns.datatime) ASC
+      WHERE ns.created_at > current_timestamp - interval '${interval}'
+      GROUP BY DATE_TRUNC('${datepart}', ns.created_at)
+      ORDER BY DATE_TRUNC('${datepart}', ns.created_at) ASC
   ) ns
 `;
 
