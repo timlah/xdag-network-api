@@ -22,7 +22,7 @@ const query = async (text, params) => {
 };
 
 cache.on('error', err => {
-  logger.error(`Redis: ${JSON.stringify(err)}`);
+  logger.error(`Redis: ${JSON.stringify(err.stack)}`);
 });
 
 module.exports = {

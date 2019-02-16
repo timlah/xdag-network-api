@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-
 const logger = require('./logger');
 
 const getPoolResponse = async url => {
@@ -12,22 +11,25 @@ const getPoolResponse = async url => {
   try {
     response = await fetch(url, { timeout: 10000 });
 
+    console.log(response);
+
     if (!response.ok) {
       throw Error(`${url}: Non 2xx HTTP code`);
     }
   } catch (err) {
-    logger.warn(`${err}`);
+    logger.warn(JSON.stringify(err.stack));
+
     // Don't process further on error
-    return { body, success, type };
+    return { body, success, type: '1' };
   }
 
   try {
     body = await response.text();
   } catch (err) {
-    logger.error(`${err}`);
+    logger.warn(JSON.stringify(err.stack));
 
     // Don't process further on error
-    return { body, success, type };
+    return { body, success, type: '2' };
   }
 
   // Try parsing body as JSON
@@ -37,7 +39,7 @@ const getPoolResponse = async url => {
 
     if (Object.prototype.hasOwnProperty.call(body, 'error')) {
       // Don't process further on error
-      return { body, success, type };
+      return { body, success, type: '3' };
     }
   } catch (err) {
     // response is text

@@ -1,21 +1,17 @@
-const mockServer = require('./server');
+const fetch = require('jest-fetch-mock');
+
 const getPoolResponse = require('../utils/getPoolResponse');
 
-let server;
-const port = 8181;
-const endpoint = `http://localhost:${port}`;
-
-beforeAll(done => {
-  server = mockServer.listen({ port }, done);
-});
-
-afterAll(done => {
-  server.close(done);
-});
-
 describe('getPoolResponse', () => {
-  test('Should fetch an URL and return an object { success, body, type }', async () => {
-    const response = await getPoolResponse(`${endpoint}/state`);
+  beforeEach(() => {
+    fetch.resetMocks();
+  });
+
+  test('Should fetch an URL and return an object with { success, body, type }', async () => {
+    fetch.mockResponseOnce(
+      'XDAG 0.2.5 Synchronized with the main network. Normal operation.'
+    );
+    const response = await getPoolResponse('https://mockAddress.com');
 
     expect(response).toEqual(
       expect.objectContaining({
@@ -27,7 +23,8 @@ describe('getPoolResponse', () => {
   });
 
   test('Should try to return the body as JSON', async () => {
-    const response = await getPoolResponse(`${endpoint}/json-state`);
+    fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+    const response = await getPoolResponse('https://mockAddress.com');
 
     expect(response).toHaveProperty('success', true);
     expect(response).toHaveProperty('type', 'json');
@@ -35,7 +32,15 @@ describe('getPoolResponse', () => {
   });
 
   test('Should timeout after 10 seconds and return { ..., success: false }', async () => {
-    const response = await getPoolResponse(`${endpoint}/timeout`);
+    fetch.mockRejectOnce(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(new Error());
+          }, 10000);
+        })
+    );
+    const response = await getPoolResponse('https://mockAddress.com');
 
     expect(response).toEqual(
       expect.objectContaining({
@@ -45,7 +50,8 @@ describe('getPoolResponse', () => {
   }, 11000);
 
   test('Should return { ..., success: false } on a non 2xx http code', async () => {
-    const response = await getPoolResponse(`${endpoint}/404`);
+    fetch.mockResponseOnce('', { status: 404 });
+    const response = await getPoolResponse('https://mockAddress.com');
 
     expect(response).toEqual(
       expect.objectContaining({

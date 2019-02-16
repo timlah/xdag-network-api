@@ -1,0 +1,27 @@
+{
+  "name": "xdag-api",
+  "version": "0.1.0",
+  "description": "Contains:",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose",
+    "postinstall": "cd worker && npm install && cd.. && cd web && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timlah/xdag-network-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timlah/xdag-network-api/issues"
+  },
+  "homepage": "https://github.com/timlah/xdag-network-api#readme",
+  "dependencies": {
+    "worker": "file:worker"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "js-yaml": "^3.12.1"
+  }
+}
