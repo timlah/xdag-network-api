@@ -6,3 +6,6 @@ jobs:
     - stage: 'Tests'
       name: 'Unit Tests'
       script: npm test
+branches:
+  only:
+    - ftr-tests
