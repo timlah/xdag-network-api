@@ -25,14 +25,14 @@ const router = new Router();
 const poolStatementGenerator = (datepart, interval) => `
   select jsonb_agg(pools_object) pools
   from (
-      select 
+      select
           jsonb_build_object(
               'id', id,
               'stats', jsonb_agg(ps_stats)
           ) pools_object
       from (
-          select 
-              p.id, 
+          select
+              p.id,
               jsonb_build_array(
                   extract(epoch from DATE_TRUNC('${datepart}', ps.created_at)),
                   AVG(ps.hashrate)::numeric(16,2),
@@ -55,7 +55,7 @@ const poolStatementGenerator = (datepart, interval) => `
 const networkStatementGenerator = (datepart, interval) => `
   select jsonb_agg(ns_stats) network
   from (
-      select 
+      select
           jsonb_build_array(
               extract(epoch from DATE_TRUNC('${datepart}', ns.created_at)),
               AVG(ns.hashrate)::numeric(16,2),
@@ -144,11 +144,7 @@ router.get('/month', async (req, res, next) => {
 });
 
 router.get('/live', async (req, res) => {
-  liveEvents.connect(
-    req,
-    res,
-    channel.statsData
-  );
+  liveEvents.connect(req, res, channel.statsData);
 });
 
 module.exports = router;

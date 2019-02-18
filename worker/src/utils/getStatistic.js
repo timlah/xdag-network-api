@@ -22,8 +22,8 @@ const getStatisticGenerator = ({ jsonKey, textKey, validate, primitive }) => (
     value = primitive(findStatistic(body, textKey, useIndex));
   }
 
-  // Return undefined if value is not a valid
-  const result = validate(value) ? value : undefined;
+  // Return null if value is not valid
+  const result = validate(value) ? value : null;
   return result;
 };
 

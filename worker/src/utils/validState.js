@@ -2,7 +2,7 @@ const db = require('../db');
 
 // Query database for valid states
 const validStatesPromise = new Promise(resolve => {
-  db.query('SELECT id, type, server_response FROM pool_state').then(result => {
+  db.query('SELECT type, server_response FROM pool_state').then(result => {
     resolve(result);
   });
 });

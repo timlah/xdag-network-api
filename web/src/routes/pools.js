@@ -2,7 +2,7 @@
 const Router = require('express-promise-router');
 
 const db = require('../db');
-const { ApiError } = require('../utils');
+const ApiError = require('../utils/apiError');
 
 const router = new Router();
 
@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
     });
 
     if (!result.length) {
-      throw new Error("0 length response from pools query");
+      throw new Error('0 length response from pools query');
     }
 
     const parsedResult = result.map(
