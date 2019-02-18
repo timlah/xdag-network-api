@@ -31,24 +31,6 @@ describe('getPoolResponse', () => {
     expect(response.body).toBeInstanceOf(Object);
   });
 
-  test('Should timeout after 10 seconds and return { ..., success: false }', async () => {
-    fetch.mockRejectOnce(
-      () =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
-            reject(new Error());
-          }, 10000);
-        })
-    );
-    const response = await getPoolResponse('https://mockAddress.com');
-
-    expect(response).toEqual(
-      expect.objectContaining({
-        success: false
-      })
-    );
-  }, 11000);
-
   test('Should return { ..., success: false } on a non 2xx http code', async () => {
     fetch.mockResponseOnce('', { status: 404 });
     const response = await getPoolResponse('https://mockAddress.com');
