@@ -11,8 +11,6 @@ const getPoolResponse = async url => {
   try {
     response = await fetch(url, { timeout: 10000 });
 
-    console.log(response);
-
     if (!response.ok) {
       throw Error(`${url}: Non 2xx HTTP code`);
     }
@@ -20,7 +18,7 @@ const getPoolResponse = async url => {
     logger.warn(JSON.stringify(err.stack));
 
     // Don't process further on error
-    return { body, success, type: '1' };
+    return { body, success, type };
   }
 
   try {
@@ -29,7 +27,7 @@ const getPoolResponse = async url => {
     logger.warn(JSON.stringify(err.stack));
 
     // Don't process further on error
-    return { body, success, type: '2' };
+    return { body, success, type };
   }
 
   // Try parsing body as JSON
@@ -39,7 +37,7 @@ const getPoolResponse = async url => {
 
     if (Object.prototype.hasOwnProperty.call(body, 'error')) {
       // Don't process further on error
-      return { body, success, type: '3' };
+      return { body, success, type };
     }
   } catch (err) {
     // response is text
