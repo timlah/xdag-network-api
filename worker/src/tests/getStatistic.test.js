@@ -1,13 +1,6 @@
 const fetch = require('jest-fetch-mock');
 
-const {
-  getState,
-  getStatisticGenerator,
-  getPoolStatistics,
-  getPoolResponse
-} = require('../utils');
-
-const validStatesPromise = Promise.resolve([
+require('../db').mockQueryResponse([
   {
     type: 'ON',
     server_response: 'Synchronized with the main network. Normal operation.'
@@ -42,6 +35,58 @@ const validStatesPromise = Promise.resolve([
   }
 ]);
 
+jest.mock('../db');
+
+const {
+  getState,
+  getStatisticGenerator,
+  getPoolStatistics,
+  getPoolResponse
+} = require('../utils');
+
+/* const validStatesPromise =
+  // mock db module return promise for getState()
+  jest.mock('../db', () => ({
+    // eslint-disable-next-line no-unused-vars
+    query: jest.fn(query =>
+      Promise.resolve([
+        {
+          type: 'ON',
+          server_response:
+            'Synchronized with the main network. Normal operation.'
+        },
+        {
+          type: 'ON',
+          server_response: 'Waiting for transfer to complete.'
+        },
+        {
+          type: 'SYNC',
+          server_response: 'Connected to the main network. Synchronizing.'
+        },
+        {
+          type: 'MAINTENANCE',
+          server_response: 'Loading blocks from the local storage.'
+        },
+        {
+          type: 'MAINTENANCE',
+          server_response: 'Trying to connect to the main network.'
+        },
+        {
+          type: 'OFFLINE',
+          server_response: "Can''t connect to unix domain socket errno:111"
+        },
+        {
+          type: 'NO_RESPONSE',
+          server_response: null
+        },
+        {
+          type: 'UNKNOWN',
+          server_response: null
+        }
+      ])
+    )
+  })); */
+
 const stateResponse = {
   connect: 'XDAG 0.2.5 Trying to connect to the main network.',
   on: 'XDAG 0.2.5 Synchronized with the main network. Normal operation.',
@@ -72,7 +117,7 @@ const stateResponse = {
       direct: 10,
       fund: 1
     },
-    date: 'Tue Oct 23 18:49:02 UTC 2018'
+    date: new Date()
   }
 };
 
@@ -86,11 +131,7 @@ chain difficulty: 8062ba6b4d81288231492060020 of 8062ba6b4d81288231492060020
 XDAG supply: 389920768.000000000 of 389920768.000000000
 hour hashrate MHs: 1524.48 of 61804085.91`;
 
-// mock db module return promise for getState()
-jest.mock('../db', () => ({
-  // eslint-disable-next-line no-unused-vars
-  query: jest.fn(query => validStatesPromise)
-}));
+const lastModifiedHeader = { 'last-modified': new Date() };
 
 describe('getStatisticGenerator', () => {
   beforeEach(() => {
@@ -98,8 +139,6 @@ describe('getStatisticGenerator', () => {
   });
 
   test('Should generate a function that returns the specified statistic from a response', async () => {
-    fetch.once(JSON.stringify(stateResponse.json)).once(statsResponse);
-
     const getStatistic = getStatisticGenerator({
       jsonKey: 'hosts',
       textKey: 'hosts',
@@ -107,18 +146,25 @@ describe('getStatisticGenerator', () => {
       validate: value => !Number.isNaN(value)
     });
 
+    fetch.mockResponseOnce(JSON.stringify(stateResponse.json));
+
     const response1 = await getPoolResponse('https://mockAddress.com');
     const hosts1 = await getStatistic(response1, 0);
     expect(hosts1).toBe(595);
 
-    // fetch.mockResponseOnce(statsResponse);
+    fetch.mockResponseOnce(statsResponse, {
+      headers: lastModifiedHeader
+    });
+
     const response2 = await getPoolResponse('https://mockAddress.com');
-    const hosts2 = await getStatistic(response2, 1);
-    expect(hosts2).toBe(594);
+    const hosts2 = await getStatistic(response2, 0);
+    expect(hosts2).toBe(593);
   });
 
-  test('Generated function should return undefined when the specified validator returns false', async () => {
-    fetch.mockResponseOnce(statsResponse);
+  test('Generated function should return null when the specified validator returns false', async () => {
+    fetch.mockResponseOnce(statsResponse, {
+      headers: lastModifiedHeader
+    });
 
     const getStatistic = getStatisticGenerator({
       jsonKey: 'chain_difficulty',
@@ -130,7 +176,7 @@ describe('getStatisticGenerator', () => {
     const response = await getPoolResponse('https://mockAddress.com');
     const chainDiff = await getStatistic(response, 0);
 
-    expect(chainDiff).toBeUndefined();
+    expect(chainDiff).toBeNull();
   });
 });
 
@@ -140,7 +186,9 @@ describe('getPoolStatistics', () => {
   });
 
   test('Should return pool stats from a json response', async () => {
-    fetch.mockResponseOnce(JSON.stringify(stateResponse.json));
+    fetch.mockResponseOnce(JSON.stringify(stateResponse.json), {
+      headers: lastModifiedHeader
+    });
 
     const response = await getPoolResponse('https://mockAddress.com');
     const { hashrate, hosts, waitSyncBlocks, orphanBlocks } = getPoolStatistics(
@@ -154,7 +202,9 @@ describe('getPoolStatistics', () => {
   });
 
   test('Should return pool stats from a text response', async () => {
-    fetch.mockResponseOnce(statsResponse);
+    fetch.mockResponseOnce(statsResponse, {
+      headers: lastModifiedHeader
+    });
 
     const response = await getPoolResponse('https://mockAddress.com');
     const { hashrate, hosts, waitSyncBlocks, orphanBlocks } = getPoolStatistics(
@@ -174,7 +224,13 @@ describe('getState', () => {
   });
 
   test('Should find the network state from a response', async () => {
-    fetch.once(stateResponse.on).once(stateResponse.connect);
+    fetch
+      .once(stateResponse.on, {
+        headers: lastModifiedHeader
+      })
+      .once(stateResponse.connect, {
+        headers: lastModifiedHeader
+      });
 
     const response1 = await getPoolResponse('https://mockAddress.com');
     const state1 = await getState(response1);
@@ -196,7 +252,7 @@ describe('getState', () => {
   });
 
   test(`Should return state "NO_RESPONSE" if getPoolResponse() returned with { ..., success: false }`, async () => {
-    fetch.mockResponseOnce(() => ({ ok: false }));
+    fetch.mockResponseOnce('', { status: 500, headers: lastModifiedHeader });
 
     const response = await getPoolResponse('https://mockAddress.com');
     const state = await getState(response);
@@ -210,7 +266,9 @@ describe('getState', () => {
   });
 
   test(`Should return state "UNKNOWN" if getPoolResponse() doesn't contain a valid state`, async () => {
-    fetch.mockResponseOnce(stateResponse.invalid);
+    fetch.mockResponseOnce(stateResponse.invalid, {
+      headers: lastModifiedHeader
+    });
 
     const response = await getPoolResponse('https://mockAddress.com');
     const state = await getState(response);
