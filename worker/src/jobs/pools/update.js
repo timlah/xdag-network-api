@@ -10,10 +10,13 @@ const {
 } = require('../../utils');
 
 const dataUrl =
-  'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pools.yml';
+  'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pool-list.yml';
 
 const update = async () => {
-  const [databasePools, response] = await Promise.all([db.query('SELECT id from pool'), fetch(dataUrl)]);
+  const [databasePools, response] = await Promise.all([
+    db.query('SELECT id from pool'),
+    fetch(dataUrl)
+  ]);
   const body = await response.text();
 
   const loadedPools = yaml.safeLoad(body);
@@ -43,7 +46,7 @@ const update = async () => {
         const statement = `
             INSERT INTO pool (
                 id,
-                name, 
+                name,
                 website,
                 mining_address,
                 state_url,
@@ -55,9 +58,9 @@ const update = async () => {
                 location,
                 location_coordinate,
                 version
-            ) 
+            )
             VALUES (
-                $1, 
+                $1,
                 $2,
                 $3,
                 $4,
@@ -71,8 +74,8 @@ const update = async () => {
                 $12,
                 $13
             )
-            ON CONFLICT (id) DO UPDATE 
-                SET name = excluded.name, 
+            ON CONFLICT (id) DO UPDATE
+                SET name = excluded.name,
                     website = excluded.website,
                     mining_address = excluded.mining_address,
                     state_url = excluded.state_url,
@@ -122,12 +125,14 @@ const update = async () => {
   );
 
   // Delete the same pools from our database that were deleted in the YAML file
-  await Promise.all(databasePools.map(async databasePool => {
-    if (!loadedPools.find(loadedPool => loadedPool.id === databasePool.id)) {
-      return db.query('DELETE FROM pool WHERE id = $1', [databasePool.id])
-    }
-    return true;
-  }))
+  await Promise.all(
+    databasePools.map(async databasePool => {
+      if (!loadedPools.find(loadedPool => loadedPool.id === databasePool.id)) {
+        return db.query('DELETE FROM pool WHERE id = $1', [databasePool.id]);
+      }
+      return true;
+    })
+  );
 
   db.cache.del('pool_list');
   logger.info(`Updated database entries for pools`);

@@ -13,7 +13,7 @@
 # paymentCommunity: Number between 0 and 100. Required. Supports up to 2 decimals. Percentage of block rewards which go to the community fund
 # website: String. Optional. Pool's HTTP(S) website address
 # location: String. Optional. A country where the pool is located in
-# locationCoordinate: Point (x, y). Optional. Pool GPS location in longitude and latitude. For example: (139.6917, 35.6895)
+# locationCoordinate: Point (x, y). Optional. Pool location in longitude and latitude. For example: (139.6917, 35.6895)
 
 # Contact: AnotherYou
 - id: 3eebc851-f07f-42c2-84ab-34fe0aa209b3
@@ -31,7 +31,7 @@
 
 # Contact: kbs1
 - id: 90f57b1a-0abf-43e9-a348-203489dd689c
-  name: "xdag.org Germany #1"
+  name: 'xdag.org Germany #1'
   miningAddress: de1.xdag.org:13654
   stateUrl: https://xdag.org/status/?pool=1
   statsUrl: https://xdag.org/status/?pool=1
@@ -45,7 +45,7 @@
 
 # Contact: kbs1
 - id: 350fe4ec-5c6f-49aa-a381-5a135d8ea39e
-  name: "xdag.org Germany #2"
+  name: 'xdag.org Germany #2'
   miningAddress: de2.xdag.org:13655
   stateUrl: https://xdag.org/status/?pool=2
   statsUrl: https://xdag.org/status/?pool=2
@@ -59,7 +59,7 @@
 
 # Contact: kbs1
 - id: 5ff7aaf1-4a55-4bc6-b835-d54c3ed2fdde
-  name: "xdag.org Germany #3"
+  name: 'xdag.org Germany #3'
   miningAddress: de3.xdag.org:13656
   stateUrl: https://xdag.org/status/?pool=3
   statsUrl: https://xdag.org/status/?pool=3
@@ -73,7 +73,7 @@
 
 # Contact: kbs1
 - id: 2f60af82-6f61-4b60-8994-86f193987118
-  name: "xdag.org Finland #1"
+  name: 'xdag.org Finland #1'
   miningAddress: fi1.xdag.org:8080
   stateUrl: https://xdag.org/status/?pool=7
   statsUrl: https://xdag.org/status/?pool=7
@@ -116,8 +116,8 @@
 - id: 96859ef8-812b-4391-9837-0bf1b3f4ca3b
   name: xdag.signal2noi.se
   miningAddress:
-    - "pool1.xdag.signal2noi.se:443"
-    - "pool1.xdag.signal2noi.se:13655"
+    - 'pool1.xdag.signal2noi.se:443'
+    - 'pool1.xdag.signal2noi.se:13655'
   stateUrl: https://xdag.signal2noi.se/status
   statsUrl: https://xdag.signal2noi.se/status
   paymentPool: 0
@@ -188,8 +188,8 @@
 - id: 909aecd6-f674-4eec-9012-dbc44273097e
   name: amgpool.com
   miningAddress:
-    - "amgpool.com:13654"
-    - "bmwpool.com:13654"
+    - 'amgpool.com:13654'
+    - 'bmwpool.com:13654'
   stateUrl: http://amgpool.com/state.txt
   statsUrl: http://amgpool.com/stats.txt
   paymentPool: 1
