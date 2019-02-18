@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "postinstall": "cd worker && npm install && cd.. && cd web && npm install",
-    "posttest": "cd worker && npm test && cd.. && cd web && npm test"
+    "postinstall": "cd worker && npm install && cd .. && cd web && npm install",
+    "posttest": "cd worker && npm test && cd .. && cd web && npm test"
   },
   "jest": {
     "roots": [
