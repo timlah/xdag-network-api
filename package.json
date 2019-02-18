@@ -1,11 +1,17 @@
 {
   "name": "xdag-api",
   "version": "0.1.0",
-  "description": "Contains:",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "postinstall": "cd worker && npm install && cd.. && cd web && npm install"
+    "test": "jest",
+    "postinstall": "cd worker && npm install && cd.. && cd web && npm install",
+    "posttest": "cd worker && npm test"
+  },
+  "jest": {
+    "roots": [
+      "tests"
+    ]
   },
   "repository": {
     "type": "git",
@@ -21,7 +27,8 @@
     "worker": "file:worker"
   },
   "devDependencies": {
-    "jest": "^23.6.0",
-    "js-yaml": "^3.12.1"
+    "jest": "^24.1.0",
+    "js-yaml": "^3.12.1",
+    "uuid-validate": "0.0.3"
   }
 }
