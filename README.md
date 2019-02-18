@@ -102,7 +102,7 @@ docker volume create networkapi_database
 ### Initialize database by running migrations
 
 ```
-docker-compose -f docker-compose.migrate.yml -d
+docker-compose -f docker-compose.migrate.yml up -d
 ```
 
 ## Run application

@@ -1,4 +1,4 @@
-version: "2"
+version: '2'
 
 services:
   reverse_proxy:
@@ -25,7 +25,7 @@ services:
       - database
     restart: unless-stopped
     expose:
-      - "${WEB_PORT}"
+      - '${WEB_PORT}'
 
   web_2:
     build:
@@ -40,7 +40,7 @@ services:
       - database
     restart: unless-stopped
     expose:
-      - "${WEB_PORT}"
+      - '${WEB_PORT}'
 
   worker:
     build:
@@ -56,7 +56,7 @@ services:
     restart: unless-stopped
 
   database:
-    image: postgres:10-alpine
+    image: postgres:11-alpine
     env_file:
       - ./.env
     volumes:
@@ -65,7 +65,7 @@ services:
       - dbnet
     restart: unless-stopped
     expose:
-      - "${POSTGRES_PORT}"
+      - '${POSTGRES_PORT}'
 
   database_migrate:
     image: boxfuse/flyway:5.2-alpine
@@ -85,7 +85,7 @@ services:
       - dbnet
     restart: unless-stopped
     expose:
-      - "${REDIS_PORT}"
+      - '${REDIS_PORT}'
 
 volumes:
   networkapi_database:
