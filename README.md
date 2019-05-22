@@ -126,7 +126,7 @@ docker-compose -f docker-compose.common.yml -f docker-compose.prod.yml up -d
 
 ### Updating pool config
 
-Every 15 minutes the application downloads `./pool-list.yml` from https://raw.githubusercontent.com/timlah/xdag-network-api/master/pool-list.yml and updates the database with any changes. The address can be modified by changing `dataUrl` in `./worker/src/jobs/pools/update.js`.
+Every 15 minutes the application downloads a file which conforms to `./pool-list.yml` (currently set to https://raw.githubusercontent.com/XDagger/XDagger.github.io/develop/_data/pool.yml) and updates the database with any changes. The address can be modified by changing `dataUrl` in `./worker/src/jobs/pools/update.js`.
 
 ### Updating database schema
 

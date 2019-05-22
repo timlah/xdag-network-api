@@ -10,7 +10,7 @@ const {
 } = require('../../utils');
 
 const dataUrl =
-  'https://raw.githubusercontent.com/timlah/xdag-network-api/master/pool-list.yml';
+  'https://raw.githubusercontent.com/XDagger/XDagger.github.io/develop/_data/pool.yml';
 
 const update = async () => {
   const [databasePools, response] = await Promise.all([
