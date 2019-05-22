@@ -14,18 +14,188 @@
 # website: String. Optional. Pool's HTTP(S) website address
 # location: String. Optional. A country where the pool is located in
 # locationCoordinate: Point (x, y). Optional. Pool location in longitude and latitude. For example: (139.6917, 35.6895)
-#
-# EXAMPLE ENTRY
-#
-# - id: 3eebc851-f07f-42c2-84ab-34fe0aa209b3
-#   name: corpopool.com
-#   miningAddress: xdag.corpopool.com:443
-#   stateUrl: http://dagger.corpopool.com/state.txt
-#   statsUrl: http://dagger.corpopool.com/stats.txt
-#   paymentPool: 1
-#   paymentFinder: 1
-#   paymentContributor: 1
-#   paymentCommunity: 1
-#   website: http://www.corpopool.com/
-#   location: Poland
-#   locationCoordinate: (19.9167, 50.0833)
+
+# Contact: AnotherYou
+- id: 3eebc851-f07f-42c2-84ab-34fe0aa209b3
+  name: corpopool.com
+  miningAddress: xdag.corpopool.com:443
+  stateUrl: http://dagger.corpopool.com/state.txt
+  statsUrl: http://dagger.corpopool.com/stats.txt
+  paymentPool: 1
+  paymentFinder: 1
+  paymentContributor: 1
+  paymentCommunity: 1
+  website: http://www.corpopool.com/
+  location: Poland
+  locationCoordinate: (19.9167, 50.0833)
+
+# Contact: kbs1
+- id: 90f57b1a-0abf-43e9-a348-203489dd689c
+  name: 'xdag.org Germany #1'
+  miningAddress: de1.xdag.org:13654
+  stateUrl: https://xdag.org/status/?pool=1
+  statsUrl: https://xdag.org/status/?pool=1
+  paymentPool: 1
+  paymentFinder: 0
+  paymentContributor: 0
+  paymentCommunity: 1
+  website: https://xdag.org/
+  location: Germany
+  locationCoordinate: (9.4910, 51.2993)
+
+# Contact: kbs1
+- id: 350fe4ec-5c6f-49aa-a381-5a135d8ea39e
+  name: 'xdag.org Germany #2'
+  miningAddress: de2.xdag.org:13655
+  stateUrl: https://xdag.org/status/?pool=2
+  statsUrl: https://xdag.org/status/?pool=2
+  paymentPool: 1
+  paymentFinder: 98
+  paymentContributor: 0
+  paymentCommunity: 1
+  website: https://xdag.org/
+  location: Germany
+  locationCoordinate: (11.6012, 48.3233)
+
+# Contact: kbs1
+- id: 5ff7aaf1-4a55-4bc6-b835-d54c3ed2fdde
+  name: 'xdag.org Germany #3'
+  miningAddress: de3.xdag.org:13656
+  stateUrl: https://xdag.org/status/?pool=3
+  statsUrl: https://xdag.org/status/?pool=3
+  paymentPool: 1
+  paymentFinder: 33
+  paymentContributor: 33
+  paymentCommunity: 1
+  website: https://xdag.org/
+  location: Germany
+  locationCoordinate: (13.4105, 52.5244)
+
+# Contact: kbs1
+- id: 2f60af82-6f61-4b60-8994-86f193987118
+  name: 'xdag.org Finland #1'
+  miningAddress: fi1.xdag.org:8080
+  stateUrl: https://xdag.org/status/?pool=7
+  statsUrl: https://xdag.org/status/?pool=7
+  paymentPool: 1
+  paymentFinder: 0
+  paymentContributor: 0
+  paymentCommunity: 1
+  website: https://xdag.org/
+  location: Finland
+  locationCoordinate: (24.9375, 60.1708)
+
+# Contact: RamsesIII
+- id: cb579c00-da9d-451c-acd8-ea3baf2d290f
+  name: xdag.pool.ga
+  miningAddress: 142.44.143.234:777
+  stateUrl: http://xdag.pool.ga/info/state.txt
+  statsUrl: http://xdag.pool.ga/info/stats.txt
+  paymentPool: 1
+  paymentFinder: 1
+  paymentContributor: 1
+  paymentCommunity: 1
+  website: http://xdag.pool.ga/
+  location: Canada
+  locationCoordinate: (-73.5878, 45.5088)
+
+# Contact: Khaak
+- id: dae09ee2-1fe7-4c3f-b8b9-7d2a96250b11
+  name: Khaak's pool
+  miningAddress: 172.105.216.53:3355
+  stateUrl: http://172.105.216.53/state.txt
+  statsUrl: http://172.105.216.53/stats.txt
+  paymentPool: 1
+  paymentFinder: 6
+  paymentContributor: 8
+  paymentCommunity: 2
+  location: Japan
+  locationCoordinate: (139.6900, 35.6900)
+
+# Contact: Gribbly
+- id: 96859ef8-812b-4391-9837-0bf1b3f4ca3b
+  name: xdag.signal2noi.se
+  miningAddress:
+    - 'pool1.xdag.signal2noi.se:443'
+    - 'pool1.xdag.signal2noi.se:13655'
+  stateUrl: https://xdag.signal2noi.se/status
+  statsUrl: https://xdag.signal2noi.se/status
+  paymentPool: 0
+  paymentFinder: 20
+  paymentContributor: 10
+  paymentCommunity: 1
+  website: https://xdag.signal2noi.se/
+  location: United States
+  locationCoordinate: (-74.4590, 40.5515)
+
+# Contact: Thomasab
+- id: ab65f55f-10f0-41a7-afab-992433e82a8c
+  name: vspool.com
+  miningAddress: 139.99.124.23:13654
+  stateUrl: http://139.99.124.23/state.txt
+  statsUrl: http://139.99.124.23/stats.txt
+  paymentPool: 1
+  paymentFinder: 10
+  paymentContributor: 5
+  paymentCommunity: 1
+  website: https://www.vspool.com/xdag/
+  location: Singapore
+  locationCoordinate: (103.8501, 1.2897)
+
+# Contact: HelloTony
+- id: 5b55634f-b2d9-431f-a2f8-9e1a5d20260f
+  name: uupool.cn
+  miningAddress: xdag.uupool.cn:13654
+  stateUrl: http://47.100.202.206:56601/state.txt
+  statsUrl: http://47.100.202.206:56601/stats.txt
+  paymentPool: 2
+  paymentFinder: 0
+  paymentContributor: 0
+  paymentCommunity: 2
+  website: http://www.uupool.cn/xdag
+  location: China
+  locationCoordinate: (120.1614, 30.2936)
+
+# Contact: Bitopia
+- id: df46d9ea-a914-4642-ba24-b88f5b5e40c3
+  name: xdag.jeepool.com
+  miningAddress: xdag.jeepool.com:13654
+  stateUrl: http://xdag.jeepool.com/status
+  statsUrl: http://xdag.jeepool.com/status
+  paymentPool: 1
+  paymentFinder: 0
+  paymentContributor: 0
+  paymentCommunity: 1
+  website: http://xdag.jeepool.com/
+  location: China
+  locationCoordinate: (121.5495, 29.8782)
+
+# Contact: Dev Alex
+- id: 53df5b25-9a8e-4eef-a4bf-ecb560bea4d3
+  name: xdag.coolmine.top
+  miningAddress: xdag.coolmine.top:13654
+  stateUrl: http://xdag.coolmine.top/state.txt
+  statsUrl: http://xdag.coolmine.top/stats.txt
+  paymentPool: 1
+  paymentFinder: 1
+  paymentContributor: 1
+  paymentCommunity: 1
+  website: https://xdagme.com/
+  location: Singapore
+  locationCoordinate: (103.8501, 1.2897)
+
+# Contact: Nobody
+- id: 909aecd6-f674-4eec-9012-dbc44273097e
+  name: amgpool.com
+  miningAddress:
+    - 'amgpool.com:13654'
+    - 'bmwpool.com:13654'
+  stateUrl: http://amgpool.com/state.txt
+  statsUrl: http://amgpool.com/stats.txt
+  paymentPool: 1
+  paymentFinder: 5
+  paymentContributor: 5
+  paymentCommunity: 1
+  website: http://amgpool.com/
+  location: Australia
+  locationCoordinate: (151.2073, -33.8679)
