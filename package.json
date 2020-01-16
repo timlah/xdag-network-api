@@ -27,8 +27,8 @@
     "worker": "file:worker"
   },
   "devDependencies": {
-    "jest": "^24.1.0",
-    "js-yaml": "^3.12.1",
+    "jest": "^24.9.0",
+    "js-yaml": "^3.13.1",
     "uuid-validate": "0.0.3"
   }
 }
